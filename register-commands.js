@@ -23,4 +23,3 @@ const rest = new REST({version: '10'}).setToken(process.env.CLIENT_TOKEN);
         console.log(`There was an error ${error}`)
     }
 })();
-
