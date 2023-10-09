@@ -9,7 +9,7 @@ let city = "ypsilanti"
 let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
 
 // Reverse geolocation API URL
-let geoURL = `https://api.geoapify.com/v1/geocode/reverse?lat=52.47944744483806&lon=13.213967739855434&format=json&apiKey=${process.env.GEO_KEY}&type=48185`
+let geoURL = `https://api.geoapify.com/v1/geocode/search?text=48185&type=postcode&format=json&apiKey=${process.env.GEO_KEY}`
 
 async function callWeather(){
     const response = await fetch(weatherURL) 
@@ -46,13 +46,15 @@ charlie.once(Events.ClientReady, client => {
 
 charlie.on('messageCreate', message => {
     if(message.author.bot) return
+    console.log(message)
+
 })
 
 charlie.on('interactionCreate', interaction => {
     if (!interaction.isChatInputCommand()) return
     console.log(interaction.commandName)
     if (interaction.commandName === `forecast`) {
-        interaction.reply(`Today's Daily forecast is..`)
+        interaction.reply(`What city?`)
     }
 
     async function call(){

@@ -34,4 +34,3 @@ To run the application, run the following command:
 ```bash
 npm run test
 ```
-
