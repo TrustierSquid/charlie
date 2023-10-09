@@ -1,15 +1,32 @@
-// Require the necessary discord.js classes
-const { Client, Events, IntentsBitField, SlashCommandBuilder, REST, Routes } = require('discord.js');
-require('dotenv').config()
+
+import { Client, Events, IntentsBitField, REST, Routes } from 'discord.js'
+import fetch from 'node-fetch';
+import 'dotenv/config'
 
 
-let weatherURl = 'http://api.weatherapi.com/v1//forecast.json'
+let city = "ypsilanti"
+// Weather API URL
+let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
 
-async function call(){
+// Reverse geolocation API URL
+let geoURL = `https://api.geoapify.com/v1/geocode/reverse?lat=52.47944744483806&lon=13.213967739855434&format=json&apiKey=${process.env.GEO_KEY}&type=48185`
 
+async function callWeather(){
+    const response = await fetch(weatherURL) 
+    const jsonRes = await response.json();
+    console.log(jsonRes)    
+    console.log('---------------------------------------')    
+}
+
+async function callGeo(){
+    const response = await fetch(geoURL)
+    const jsonRes = await response.json();
+    console.log(jsonRes);
 }
 
 
+callGeo()
+callWeather()
 
 // DISCORD BOT INITIATION
 
@@ -23,17 +40,6 @@ const charlie = new Client({
 });
 
 
-//Command builder
-module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('ping')
-        .setDescription("Replies with Pong!"),
-    async execute(interaction){
-        await interaction.reply("Pong!")
-        await interaction.reply(`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`)
-    },
-}
-
 charlie.once(Events.ClientReady, client => {
     console.log("Charlie is Ready!")
 })
@@ -45,10 +51,22 @@ charlie.on('messageCreate', message => {
 charlie.on('interactionCreate', interaction => {
     if (!interaction.isChatInputCommand()) return
     console.log(interaction.commandName)
-    if (interaction.commandName === 'forecast') {
+    if (interaction.commandName === `forecast`) {
         interaction.reply(`Today's Daily forecast is..`)
     }
+
+    async function call(){
+        const response = await fetch(weatherURL) 
+        const jsonRes = await response.json();
+        console.log(jsonRes)    
+        console.log('---------------------------------------')    
+    }
+
+    let findLoction = ()=> {
+        
+    }
+
+    
 })
 
 // charlie.login(process.env.CLIENT_TOKEN)
-apiCall()
