@@ -69,4 +69,4 @@ charlie.on('interactionCreate', interaction => {
     
 })
 
-// charlie.login(process.env.CLIENT_TOKEN)
+charlie.login(process.env.CLIENT_TOKEN)
