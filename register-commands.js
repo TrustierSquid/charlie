@@ -1,10 +1,10 @@
 require('dotenv').config()
 const {REST, Routes}= require('discord.js')
-let type;
+
 
 const commands = [
     {
-        name: `forecast ${type}`,
+        name: `forecast`,
         description: 'Returns your daily forecast',
     },
 ];
