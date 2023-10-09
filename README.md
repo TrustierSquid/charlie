@@ -18,7 +18,7 @@ Then, add the following variables to the file:
 # Discord API Keys (https://discord.com/developers/applications)
 APPLICATION_ID = IDHERE
 CLIENT_TOKEN = TOKENHERE
-# Reverse Geolocation API key: https://apidocs.geoapify.com/docs/geocoding/reverse-geocoding/#about
+# Geocoding API key: https://apidocs.geoapify.com/docs/geocoding/reverse-geocoding/#about
 GEO_KEY = KEYHERE
 ```
 
