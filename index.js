@@ -90,7 +90,7 @@ charlie.on('interactionCreate', interaction => {
         interaction.reply("You are currently in " + interaction.guild.name);
     }
     if (interaction.commandName === 'educate') {
-        console.log(interaction.user.name +  " ran the educate command.")
+        console.log(interaction.user.displayName +  " ran the educate command.")
         interaction.reply("You should not load commands in the `index.js` file with **__if statements__**. Create a method, and unforunately knowing how JS is, you may have to create a massive switch case inside that if statement. With Meloetta (shameless plug https://joshrandall.net/meloetta), we defined all the commands using functions, but that could just be how Python is vs JS.")
     }
     // Calling weather api based on what zip code the user entered.
