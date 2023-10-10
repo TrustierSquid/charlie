@@ -24,9 +24,14 @@ const commands = [
     },
     
     {
-        name: 'servername',
+        name: `servername`,
         description: 'displays server name',
     },
+
+    {
+        name: `educate`,
+        description: 'Correctly educates you on how to handle discord commands in JavaScript',
+    }
 ];
 
 const rest = new REST({version: '10'}).setToken(clientId);
