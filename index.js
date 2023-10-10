@@ -2,7 +2,7 @@
 import { Client, Events, IntentsBitField, REST, ReactionUserManager, Routes } from 'discord.js'
 import fetch from 'node-fetch';
 import 'dotenv/config'
-
+import register
 const GEO_KEY = process.env.GEO_KEY;
 const CLIENT_TOKEN = process.env.CLIENT_TOKEN;
 const SERVER_ID = process.env.SERVER_ID;
