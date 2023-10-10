@@ -4,6 +4,10 @@ import {REST, Routes} from 'discord.js'
 
 let postalCode;
 
+export const clientId = process.env['CLIENT_TOKEN'];
+const appId = process.env['APPLICATION_ID']
+// const guildId = process.env['testguildid']
+
 const commands = [
     {
         name: `forecast`,
@@ -25,14 +29,14 @@ const commands = [
     },
 ];
 
-const rest = new REST({version: '10'}).setToken(process.env.CLIENT_TOKEN);
+const rest = new REST({version: '10'}).setToken(clientId);
 
-function register(){
+export async function register(){
     {
         try {
             console.log("Registering slash commands.....")
             await rest.put(
-                Routes.applicationGuildCommands(process.env.APPLICATION_ID, process.env.SERVER_ID),
+                Routes.applicationCommands(appId),
                 { body: commands }
             );
     

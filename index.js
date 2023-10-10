@@ -2,16 +2,17 @@
 import { Client, Events, IntentsBitField, REST, ReactionUserManager, Routes } from 'discord.js'
 import fetch from 'node-fetch';
 import 'dotenv/config'
-import register
+import { register } from "./register-commands.js";
+import { clientId } from "./register-commands.js";
 const GEO_KEY = process.env.GEO_KEY;
-const CLIENT_TOKEN = process.env.CLIENT_TOKEN;
-const SERVER_ID = process.env.SERVER_ID;
-const APPLICATION_ID = process.env.APPLICATION_ID;
+// const CLIENT_TOKEN = process.env.CLIENT_TOKEN;
+// const SERVER_ID = process.env.SERVER_ID;
+const APPLICATION_ID = process.env['APPLICATION_ID'];
 
 // Weather API URL
 let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
 
-
+register();
 
 async function callWeather(){
     const response = await fetch(weatherURL) 
@@ -85,5 +86,5 @@ charlie.on('interactionCreate', interaction => {
     
 })
 
-charlie.login(CLIENT_TOKEN)
+charlie.login(clientId);
 // callWeather()
