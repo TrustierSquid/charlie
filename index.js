@@ -81,6 +81,12 @@ charlie.on('interactionCreate', interaction => {
             console.log(city);
         })
         // interaction.reply('You are in ' + callGeo());
+        if (interaction.commandName === `servername`) {
+            let api = fetch(interaction);
+            let apiResponse = response(api);
+            console.log(apiResponse);
+        }
+
     }
     
     // Calling weather api based on what zip code the user entered.
