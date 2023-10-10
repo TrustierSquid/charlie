@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  charlie:
+    container_name: charlie
+    image: charlie
+    build:
+      context: .
+      dockerfile: ./Charlie.dockerfile
+    restart:
+      unless-stopped
