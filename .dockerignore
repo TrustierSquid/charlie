@@ -2,4 +2,4 @@ node_modules/
 documentation/
 README.md
 examples/
-docker-compose/
+docker-compose
