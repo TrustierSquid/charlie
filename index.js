@@ -1,15 +1,17 @@
 
-import { Client, Events, IntentsBitField, REST, Routes } from 'discord.js'
+import { Client, Events, IntentsBitField, REST, ReactionUserManager, Routes } from 'discord.js'
 import fetch from 'node-fetch';
 import 'dotenv/config'
 
+const GEO_KEY = process.env.GEO_KEY;
+const CLIENT_TOKEN = process.env.CLIENT_TOKEN;
+const SERVER_ID = process.env.SERVER_ID;
+const APPLICATION_ID = process.env.APPLICATION_ID;
 
-let city = "ypsilanti"
 // Weather API URL
 let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
 
-// Reverse geolocation API URL
-let geoURL = `https://api.geoapify.com/v1/geocode/search?text=48185&type=postcode&format=json&apiKey=${process.env.GEO_KEY}`
+
 
 async function callWeather(){
     const response = await fetch(weatherURL) 
@@ -24,10 +26,6 @@ async function callGeo(){
     console.log(jsonRes);
 }
 
-
-callGeo()
-callWeather()
-
 // DISCORD BOT INITIATION
 
 const charlie = new Client({
@@ -41,34 +39,51 @@ const charlie = new Client({
 
 
 charlie.once(Events.ClientReady, client => {
-    console.log("Charlie is Ready!")
+    console.log("Charlie has logged in and waiting....");
 })
 
 charlie.on('messageCreate', message => {
     if(message.author.bot) return
-    console.log(message)
 
 })
 
-charlie.on('interactionCreate', interaction => {
-    if (!interaction.isChatInputCommand()) return
-    console.log(interaction.commandName)
-    if (interaction.commandName === `forecast`) {
-        interaction.reply(`What city?`)
-    }
 
-    async function call(){
+
+// interactions
+charlie.on('interactionCreate', interaction => {
+    // if the message is not a slash command, do nothing
+    if (!interaction.isChatInputCommand()) return
+    
+    // forecast command displays weather forecast based on zipcode
+    if (interaction.commandName === `forecast`) {
+        // grabs the value of the argument (ZIPCODE)
+        let userPostalCode = interaction.options.get('postalcode').value;
+
+        // Reverse geolocation API URL
+        // api gets called based on entered zip code
+        let geoURL = `https://api.geoapify.com/v1/geocode/search?text=${userPostalCode}&type=postcode&format=json&apiKey=${GEO_KEY}`
+        let callGeo = async ()=>{
+            const response = await fetch(geoURL)
+            const jsonRes = await response.json();
+            // All location data
+            // console.log(jsonRes);
+
+            console.log(jsonRes.results[0].city)
+        }
+
+        callGeo()
+    }
+    
+    // Calling weather api based on what zip code the user entered.
+    async function callWeather(){
         const response = await fetch(weatherURL) 
         const jsonRes = await response.json();
         console.log(jsonRes)    
         console.log('---------------------------------------')    
     }
 
-    let findLoction = ()=> {
-        
-    }
-
     
 })
 
-charlie.login(process.env.CLIENT_TOKEN)
+charlie.login(CLIENT_TOKEN)
+// callWeather()
