@@ -21,11 +21,12 @@ async function callWeather(){
     console.log('---------------------------------------')    
 }
 
-async function callGeo(){
-    const response = await fetch(geoURL)
-    const jsonRes = await response.json();
-    console.log(jsonRes);
-}
+// async function callGeo(){
+//     const response = await fetch(geoURL)
+//     const jsonRes = await response.json();
+//     console.log(jsonRes);
+
+// }
 
 // DISCORD BOT INITIATION
 
@@ -68,11 +69,19 @@ charlie.on('interactionCreate', interaction => {
             const jsonRes = await response.json();
             // All location data
             // console.log(jsonRes);
+            let city = jsonRes.results[0].city;
+            return city
 
-            console.log(jsonRes.results[0].city)
+            
+            // console.log(jsonRes.results[0].city);
+            // return Promise.resolve(jsonRes.results[0].city);
         }
 
-        callGeo()
+        callGeo().then((city) => {
+            interaction.reply("You are in " + city);
+            console.log(city);
+        })
+        // interaction.reply('You are in ' + callGeo());
     }
     
     // Calling weather api based on what zip code the user entered.
