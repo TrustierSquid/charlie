@@ -1,11 +1,27 @@
-require('dotenv').config()
-const {REST, Routes}= require('discord.js')
+import 'dotenv/config'
+import {REST, Routes} from 'discord.js'
+// const {REST, Routes}= require('discord.js')
 
+let postalCode;
 
 const commands = [
     {
         name: `forecast`,
         description: 'Returns your daily forecast',
+        options: [
+            {
+                type: 4,
+                name: 'postalcode',
+                required: true,
+                description: 'Enter a zip code',
+                max_length: 5,
+            },
+        ],
+    },
+    
+    {
+        name: 'servername',
+        description: 'displays server name',
     },
 ];
 
