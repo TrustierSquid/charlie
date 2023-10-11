@@ -7,6 +7,10 @@ let postalCode;
 export const clientID = process.env['CLIENT_TOKEN'];
 // const guildId = process.env['testguildid']
 
+export const clientId = process.env['CLIENT_TOKEN'];
+const appId = process.env['APPLICATION_ID']
+// const guildId = process.env['testguildid']
+
 const commands = [
     {
         name: `forecast`,

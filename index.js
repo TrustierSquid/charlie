@@ -1,12 +1,30 @@
 import { Client, Events, IntentsBitField, REST, ReactionUserManager, Routes } from 'discord.js'
 import fetch from 'node-fetch';
 import 'dotenv/config'
+import { register, clientID } from "./register-commands.js";
+const geoKey = process.env.GEO_KEY;
+// const CLIENT_TOKEN = process.env.CLIENT_TOKEN;
+// const SERVER_ID = process.env.SERVER_ID;
+const appID = process.env['APPLICATION_ID'];
 
-const GEO_KEY = process.env.GEO_KEY;
-const CLIENT_TOKEN = process.env.CLIENT_TOKEN;
-const SERVER_ID = process.env.SERVER_ID;
-const APPLICATION_ID = process.env.APPLICATION_ID;
+// Weather API URL
+let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
 
+register();
+
+async function callWeather(){
+    const response = await fetch(weatherURL) 
+    const jsonRes = await response.json();
+    console.log(jsonRes)    
+    console.log('---------------------------------------')    
+}
+
+// async function callGeo(){
+//     const response = await fetch(geoURL)
+//     const jsonRes = await response.json();
+//     console.log(jsonRes);
+
+// }
 
 // DISCORD BOT INITIATION
 
@@ -43,7 +61,7 @@ charlie.on('interactionCreate', interaction => {
 
         // api gets called based on entered zip code
         // Reverse geolocation API URL
-        let geoURL = `https://api.geoapify.com/v1/geocode/search?text=${userPostalCode}&type=postcode&format=json&apiKey=${GEO_KEY}`
+        let geoURL = `https://api.geoapify.com/v1/geocode/search?text=${userPostalCode}&type=postcode&format=json&apiKey=${geoKey}`
         
         // Weather API URL
         let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
@@ -73,6 +91,14 @@ charlie.on('interactionCreate', interaction => {
         searchGeo()
     }
     
+    if (interaction.commandName === `servername`) {
+        console.log("servername command ran in " + interaction.guild.name);
+        interaction.reply("You are currently in " + interaction.guild.name);
+    }
+    if (interaction.commandName === 'educate') {
+        console.log(interaction.user.displayName +  " ran the educate command.")
+        interaction.reply("You should not load commands in the `index.js` file with **__if statements__**. Create a method, and unforunately knowing how JS is, you may have to create a massive switch case inside that if statement. With Meloetta (shameless plug https://joshrandall.net/meloetta), we defined all the commands using functions, but that could just be how Python is vs JS.")
+    }
     // Calling weather api based on what zip code the user entered.
     async function callWeather(){
         console.log('---------------------------------------')    
@@ -81,4 +107,4 @@ charlie.on('interactionCreate', interaction => {
     
 })
 
-charlie.login(CLIENT_TOKEN)
+charlie.login(clientID)
