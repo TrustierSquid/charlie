@@ -2,29 +2,10 @@ import { Client, Events, IntentsBitField, REST, ReactionUserManager, Routes } fr
 import fetch from 'node-fetch';
 import 'dotenv/config'
 import { register, clientID } from "./register-commands.js";
-const geoKey = process.env.GEO_KEY;
-// const CLIENT_TOKEN = process.env.CLIENT_TOKEN;
-// const SERVER_ID = process.env.SERVER_ID;
+const geoKey = process.env['GEO_KEY'];
 const appID = process.env['APPLICATION_ID'];
 
-// Weather API URL
-let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
-
 register(appID);
-
-async function callWeather(){
-    const response = await fetch(weatherURL) 
-    const jsonRes = await response.json();
-    console.log(jsonRes)    
-    console.log('---------------------------------------')    
-}
-
-// async function callGeo(){
-//     const response = await fetch(geoURL)
-//     const jsonRes = await response.json();
-//     console.log(jsonRes);
-
-// }
 
 // DISCORD BOT INITIATION
 
@@ -59,33 +40,41 @@ charlie.on('interactionCreate', interaction => {
         // grabs the value of the argument (ZIPCODE)
         let userPostalCode = interaction.options.get('postalcode').value;
 
+        let latitude;
+        let longitude;
+        
         // api gets called based on entered zip code
         // Reverse geolocation API URL
         let geoURL = `https://api.geoapify.com/v1/geocode/search?text=${userPostalCode}&type=postcode&format=json&apiKey=${geoKey}`
         
         // Weather API URL
-        let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
         // searching location and forecast
         let searchGeo = async ()=>{
             // All location data
             const responseLocation = await fetch(geoURL)
             const jsonResLocation = await responseLocation.json();
-            // format for getting city info (jsonRes.results[0].city)
+            latitude = jsonResLocation.results[0].latitude;
+            longitude = jsonResLocation.results[0].longitude;
+            console.log(jsonResLocation.results[0]);
+            console.log();
             
+            let weatherURL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto`
+            
+            // format for getting city info (jsonRes.results[0].city)
 
             let searchWeather = async ()=> {
                 const responseWeather = await fetch(weatherURL) 
                 const jsonResWeather = await responseWeather.json();
-                console.log(jsonResWeather)  
+                console.log(jsonResWeather) 
 
             }
 
-            searchWeather()
+            searchWeather();
 
-            interaction.reply(`
-                Today in ${jsonResLocation.results[0].city}...
+            let city = jsonResLocation.results[0].city
 
-            `)
+            interaction.reply(`Today in ${city}...\n
+            It is currently: `)
         }
 
         searchGeo()
