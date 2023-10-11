@@ -1,4 +1,3 @@
-
 import { Client, Events, IntentsBitField, REST, ReactionUserManager, Routes } from 'discord.js'
 import fetch from 'node-fetch';
 import 'dotenv/config'
@@ -8,23 +7,6 @@ const CLIENT_TOKEN = process.env.CLIENT_TOKEN;
 const SERVER_ID = process.env.SERVER_ID;
 const APPLICATION_ID = process.env.APPLICATION_ID;
 
-// Weather API URL
-let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
-
-
-
-async function callWeather(){
-    const response = await fetch(weatherURL) 
-    const jsonRes = await response.json();
-    console.log(jsonRes)    
-    console.log('---------------------------------------')    
-}
-
-async function callGeo(){
-    const response = await fetch(geoURL)
-    const jsonRes = await response.json();
-    console.log(jsonRes);
-}
 
 // DISCORD BOT INITIATION
 
@@ -59,26 +41,40 @@ charlie.on('interactionCreate', interaction => {
         // grabs the value of the argument (ZIPCODE)
         let userPostalCode = interaction.options.get('postalcode').value;
 
-        // Reverse geolocation API URL
         // api gets called based on entered zip code
+        // Reverse geolocation API URL
         let geoURL = `https://api.geoapify.com/v1/geocode/search?text=${userPostalCode}&type=postcode&format=json&apiKey=${GEO_KEY}`
-        let callGeo = async ()=>{
-            const response = await fetch(geoURL)
-            const jsonRes = await response.json();
+        
+        // Weather API URL
+        let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
+        // searching location and forecast
+        let searchGeo = async ()=>{
             // All location data
-            // console.log(jsonRes);
+            const responseLocation = await fetch(geoURL)
+            const jsonResLocation = await response.json();
+            // format for getting city info (jsonRes.results[0].city)
+            
 
-            console.log(jsonRes.results[0].city)
+            let searchWeather = async ()=> {
+                const responseWeather = await fetch(weatherURL) 
+                const jsonResWeather = await response.json();
+                console.log(jsonResWeather)  
+
+            }
+
+            searchWeather()
+
+            interaction.reply(`
+                Today in ${jsonResLocation.results[0].city}...
+
+            `)
         }
 
-        callGeo()
+        searchGeo()
     }
     
     // Calling weather api based on what zip code the user entered.
     async function callWeather(){
-        const response = await fetch(weatherURL) 
-        const jsonRes = await response.json();
-        console.log(jsonRes)    
         console.log('---------------------------------------')    
     }
 
@@ -86,4 +82,3 @@ charlie.on('interactionCreate', interaction => {
 })
 
 charlie.login(CLIENT_TOKEN)
-// callWeather()
