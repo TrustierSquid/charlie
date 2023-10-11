@@ -10,7 +10,7 @@ const appID = process.env['APPLICATION_ID'];
 // Weather API URL
 let weatherURL = 'https://api.open-meteo.com/v1/forecast?latitude=42.2411&longitude=-83.613&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto'
 
-register();
+register(appID);
 
 async function callWeather(){
     const response = await fetch(weatherURL) 
@@ -69,13 +69,13 @@ charlie.on('interactionCreate', interaction => {
         let searchGeo = async ()=>{
             // All location data
             const responseLocation = await fetch(geoURL)
-            const jsonResLocation = await response.json();
+            const jsonResLocation = await responseLocation.json();
             // format for getting city info (jsonRes.results[0].city)
             
 
             let searchWeather = async ()=> {
                 const responseWeather = await fetch(weatherURL) 
-                const jsonResWeather = await response.json();
+                const jsonResWeather = await responseWeather.json();
                 console.log(jsonResWeather)  
 
             }
